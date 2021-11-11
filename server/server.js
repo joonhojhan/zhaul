@@ -34,7 +34,7 @@ const createApp = () => {
 
   app.use(
     session({
-      secret: process.env.SESSION_SECRET || 'chariot-session',
+      secret: process.env.SESSION_SECRET || 'test-session-secret',
       store: sessionStore,
       resave: false,
       saveUninitialized: false,
