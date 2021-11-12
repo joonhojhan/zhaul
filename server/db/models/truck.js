@@ -10,6 +10,10 @@ const Truck = db.define('truck', {
   type: {
     type: DataTypes.ENUM('compact', 'mid-size', 'full-size', 'heavy-duty'),
   },
+  price: {
+    type: DataTypes.DECIMAL(10, 2),
+    allowNull: false,
+  },
 })
 
 module.exports = Truck

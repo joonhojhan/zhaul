@@ -1,8 +1,10 @@
 const router = require('express').Router()
+const User = require('../db/models/user')
 
-router.get('/', (req, res, next) => {
+router.get('/', async (req, res, next) => {
   try {
-    res.json({ message: `/ users route` })
+    const users = await User.findAll()
+    return res.json(users)
   } catch (error) {
     console.error(error.message)
     next(error)
