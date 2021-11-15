@@ -11,6 +11,10 @@ const Reservation = db.define('reservation', {
     type: DataTypes.DATE,
     allowNull: false,
   },
+  price: {
+    type: DataTypes.DECIMAL(10, 2),
+    allowNull: false,
+  },
 })
 
 module.exports = Reservation

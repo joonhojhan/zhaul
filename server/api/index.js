@@ -5,7 +5,7 @@ router.use('/trucks', require('./trucks'))
 router.use('/reservations', require('./reservations'))
 
 router.use((req, res, next) => {
-  const errorr = new Error('Not found.')
+  const error = new Error('Not found.')
   error.status = 404
   next(error)
 })

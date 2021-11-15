@@ -1,19 +1,20 @@
 require('dotenv').config()
 const express = require('express')
-const cors = require('cors')
+// const cors = require('cors')
 const session = require('express-session')
 const passport = require('passport')
 const SequelizeStore = require('connect-session-sequelize')(session.Store)
 const db = require('./db')
 const sessionStore = new SequelizeStore({ db })
+const logger = require('morgan')
 
 const app = express()
 
 const PORT = process.env.PORT || 8080
 
-let corsOptions = {
-  origin: 'http://localhost:8081',
-}
+// let corsOptions = {
+//   origin: 'http://localhost:3000',
+// }
 
 passport.serializeUser((user, done) => done(null, user.id))
 
@@ -27,8 +28,23 @@ passport.deserializeUser(async (id, done) => {
 })
 
 const createApp = () => {
-  app.use(cors(corsOptions))
-
+  if (process.env.NODE_ENV === 'dev') {
+    app.use(logger('dev'))
+  }
+  app.use(function (req, res, next) {
+    res.header('Access-Control-Allow-Credentials', true)
+    res.header('Access-Control-Allow-Origin', req.headers.origin)
+    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE')
+    res.header(
+      'Access-Control-Allow-Headers',
+      'X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept'
+    )
+    if ('OPTIONS' == req.method) {
+      res.sendStatus(200)
+    } else {
+      next()
+    }
+  })
   app.use(express.json())
   app.use(express.urlencoded({ extended: true }))
 
@@ -63,6 +79,7 @@ const startListening = () => {
 const syncDb = () => db.sync({ force: false })
 
 async function bootApp() {
+  await sessionStore.sync()
   await syncDb()
   await createApp()
   await startListening()

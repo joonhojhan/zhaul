@@ -1,0 +1,8 @@
+export const LOGIN = 'LOGIN'
+export const LOGOUT = 'LOGOUT'
+export const SIGNUP = 'SIGNUP'
+export const USER_LOADED = 'USER_LOADED'
+export const GET_TRUCKS = 'GET_TRUCKS'
+export const GET_AVAILABLE_TRUCKS = 'GET_AVAILABLE_TRUCKS'
+export const GET_RESERVATIONS_HISTORY = 'GET_RESERVATIONS_HISTORY'
+export const MAKE_RESERVATION = 'MAKE_RESERVATION'
