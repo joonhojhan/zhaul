@@ -1,4 +1,5 @@
 require('dotenv').config()
+const path = require('path')
 const express = require('express')
 // const cors = require('cors')
 const session = require('express-session')
@@ -60,9 +61,17 @@ const createApp = () => {
   app.use(passport.initialize())
   app.use(passport.session())
 
+  if (process.env.NODE_ENV === 'production') {
+    app.use(express.static(path.join(__dirname, 'build')))
+  }
+
   app.use('/auth', require('./auth'))
   app.use('/api', require('./api'))
-
+  if (process.env.NODE_ENV === 'production') {
+    app.get('/*', (req, res) => {
+      res.sendFile(path.join(__dirname, 'build', 'index.html'))
+    })
+  }
   app.use((err, req, res, next) => {
     console.error(err)
     console.error(err.stack)

@@ -7,7 +7,7 @@ const config = {
 
 export const loadUser = () => async (dispatch) => {
   try {
-    const { data } = await axios.get('http://localhost:8080/auth/me', config)
+    const { data } = await axios.get('/auth/me', config)
     dispatch({ type: USER_LOADED, payload: data })
   } catch (error) {
     console.error(error)
@@ -17,11 +17,7 @@ export const loadUser = () => async (dispatch) => {
 export const signup = (firstName, lastName, email, password) => async (dispatch) => {
   const body = { firstName, lastName, email, password }
   try {
-    const { data } = await axios.post(
-      'http://localhost:8080/auth/signup',
-      body,
-      config
-    )
+    const { data } = await axios.post('/auth/signup', body, config)
     dispatch({ type: SIGNUP, payload: data })
     dispatch(loadUser())
   } catch (error) {
@@ -32,11 +28,7 @@ export const signup = (firstName, lastName, email, password) => async (dispatch)
 export const login = (email, password) => async (dispatch) => {
   const body = { email, password }
   try {
-    const { data } = await axios.post(
-      'http://localhost:8080/auth/login',
-      body,
-      config
-    )
+    const { data } = await axios.post('/auth/login', body, config)
     dispatch({
       type: LOGIN,
       payload: data,
@@ -49,7 +41,7 @@ export const login = (email, password) => async (dispatch) => {
 
 export const logout = () => async (dispatch) => {
   try {
-    await axios.post('http://localhost:8080/auth/logout', null, config)
+    await axios.post('/auth/logout', null, config)
     dispatch({ type: LOGOUT })
   } catch (error) {
     console.error(error)
