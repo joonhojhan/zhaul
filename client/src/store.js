@@ -34,7 +34,6 @@ function loadStateFromStorage() {
 const savedState = loadStateFromStorage()
 
 const store = createStore(rootReducer, savedState, middleware)
-// console.log('store.getState()', store.getState())
 store.subscribe(() => saveStateToStorage(store.getState()))
 
 export default store

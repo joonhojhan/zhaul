@@ -22,35 +22,45 @@ router.get('/', async (req, res, next) => {
 
 router.get('/available', async (req, res, next) => {
   try {
-    const { start, end } = req.query
-    const trucks = await Truck.findAll()
-    const notAvailable = await Truck.findAll({
+    const { start, end, type } = req.query
+    const startDate = new Date(start)
+    const endDate = new Date(end)
+    const trucks = await Truck.findAll({
       include: {
         model: Reservation,
-        where: {
-          start: {
-            [Op.gte]: new Date(start),
-          },
-          end: {
-            [Op.lte]: new Date(end),
-          },
-        },
       },
     })
-    const result = []
-    for (let i = 0; i < trucks.length; i++) {
-      let found = false
-      for (let j = 0; j < notAvailable.length; j++) {
-        if (trucks[i].id === notAvailable[j].id) {
-          found = true
-          break
-        }
+    const available = trucks.filter((truck) => {
+      if (type === 'all') {
+        return !truck.reservations.some((reservation) => {
+          if (reservation.end <= startDate || reservation.start >= endDate) {
+            return false
+          }
+          return true
+        })
       }
-      if (!found) {
-        result.push(trucks[i])
-      }
-    }
-    return res.json(result)
+      return (
+        truck.type === type &&
+        !truck.reservations.some((reservation) => {
+          if (reservation.end <= startDate || reservation.start >= endDate) {
+            return false
+          }
+          return true
+        })
+      )
+    })
+    return res.json(available)
+  } catch (error) {
+    console.error(error.message)
+    next(error)
+  }
+})
+
+router.get('/:id', async (req, res, next) => {
+  try {
+    const { id } = req.params
+    const truck = await Truck.findByPk(id)
+    return res.json(truck)
   } catch (error) {
     console.error(error.message)
     next(error)

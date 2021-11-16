@@ -17,7 +17,9 @@ const Home = ({ logout }) => {
     <Fragment>
       <Navbar activeTab={activeTab} setActiveTab={setActiveTab} tabs={tabs} />
       {activeTab.toLowerCase() === 'reservations' && <Reservations />}
-      {activeTab.toLowerCase() === 'reserve' && <Reserve />}
+      {activeTab.toLowerCase() === 'reserve' && (
+        <Reserve setActiveTab={setActiveTab} />
+      )}
     </Fragment>
   )
 }
