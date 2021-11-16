@@ -7,7 +7,6 @@ const passport = require('passport')
 const SequelizeStore = require('connect-session-sequelize')(session.Store)
 const db = require('./db')
 const sessionStore = new SequelizeStore({ db })
-const logger = require('morgan')
 
 const app = express()
 
@@ -30,7 +29,7 @@ passport.deserializeUser(async (id, done) => {
 
 const createApp = () => {
   if (process.env.NODE_ENV === 'dev') {
-    app.use(logger('dev'))
+    app.use(require('morgan')('dev'))
   }
   app.use(function (req, res, next) {
     res.header('Access-Control-Allow-Credentials', true)

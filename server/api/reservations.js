@@ -1,4 +1,5 @@
 const router = require('express').Router()
+const sequelize = require('sequelize')
 const Reservation = require('../db/models/reservation')
 const Truck = require('../db/models/truck')
 const User = require('../db/models/user')
@@ -49,7 +50,7 @@ router.get('/history', async (req, res, next) => {
       where: { userId: req.user.id },
       include: Truck,
     })
-    return res.json(reservations)
+    return res.json(reservations.sort((a, b) => a.createdAt - b.createdAt))
   } catch (error) {
     console.error(error.message)
     next(error)

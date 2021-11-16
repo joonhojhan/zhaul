@@ -3,6 +3,9 @@ import { connect } from 'react-redux'
 import { clearTruck, getTruck } from '../../actions/trucks'
 import { makeReservation } from '../../actions/reservations'
 import { Loading } from '../layouts/Loading'
+import StripeContainer from '../stripe/StripeContainer'
+import useModal from '../layouts/useModal'
+import ModalOverlay from '../layouts/ModalOverlay'
 
 const Checkout = ({
   handleStepsBack,
@@ -15,14 +18,21 @@ const Checkout = ({
   trucks: { truck },
   setActiveTab,
 }) => {
+  const [showStripe, setShowStripe] = useState(false)
+  const { isShowing, toggle } = useModal()
+
   useEffect(() => {
     getTruck(truckId)
   }, [])
 
+  const handleStripe = (e) => {
+    e.preventDefault()
+    toggle()
+    setShowStripe(true)
+  }
+
   const handleCheckout = () => {
     makeReservation(startDate, endDate, truckId)
-    clearTruck()
-    setActiveTab('reservations')
   }
 
   return !truck ? (
@@ -95,11 +105,21 @@ const Checkout = ({
         <button
           type="button"
           className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-cyan-500 hover:bg-cyan-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500 float-right mb-6"
-          onClick={handleCheckout}
+          onClick={handleStripe}
         >
           Checkout
         </button>
       </div>
+      {showStripe && (
+        <StripeContainer
+          setShowStripe={setShowStripe}
+          toggle={toggle}
+          start={startDate}
+          end={endDate}
+          handleCheckout={handleCheckout}
+        />
+      )}
+      {isShowing && <ModalOverlay toggle={toggle} />}
     </div>
   )
 }

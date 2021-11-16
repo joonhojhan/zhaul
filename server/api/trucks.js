@@ -49,7 +49,7 @@ router.get('/available', async (req, res, next) => {
         })
       )
     })
-    return res.json(available)
+    return res.json(available.sort((a, b) => a.price - b.price))
   } catch (error) {
     console.error(error.message)
     next(error)
