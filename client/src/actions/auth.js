@@ -1,5 +1,13 @@
 import axios from 'axios'
-import { USER_LOADED, LOGIN, LOGOUT, SIGNUP } from './types'
+import {
+  USER_LOADED,
+  LOGIN,
+  LOGOUT,
+  SIGNUP,
+  LOGIN_ERROR,
+  SIGNUP_ERROR,
+  CLEAR_AUTH_ERROR,
+} from './types'
 
 const config = {
   withCredentials: true,
@@ -21,6 +29,7 @@ export const signup = (firstName, lastName, email, password) => async (dispatch)
     dispatch({ type: SIGNUP, payload: data })
     dispatch(loadUser())
   } catch (error) {
+    dispatch({ type: SIGNUP_ERROR })
     console.error(error)
   }
 }
@@ -35,6 +44,7 @@ export const login = (email, password) => async (dispatch) => {
     })
     dispatch(loadUser())
   } catch (error) {
+    dispatch({ type: LOGIN_ERROR })
     console.error(error)
   }
 }
@@ -46,4 +56,8 @@ export const logout = () => async (dispatch) => {
   } catch (error) {
     console.error(error)
   }
+}
+
+export const clearAuthError = () => (dispatch) => {
+  dispatch({ type: CLEAR_AUTH_ERROR })
 }

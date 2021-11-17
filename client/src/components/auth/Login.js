@@ -1,11 +1,14 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { connect } from 'react-redux'
 import { Link, Navigate } from 'react-router-dom'
 
-import { login } from '../../actions/auth'
+import { login, clearAuthError } from '../../actions/auth'
 import logo from '../../resources/ZHAUL_logo_final.png'
 
-function Login({ auth: { isAuthenticated }, login }) {
+function Login({ auth: { isAuthenticated, error }, login, clearAuthError }) {
+  useEffect(() => {
+    clearAuthError()
+  }, [])
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
@@ -77,6 +80,10 @@ function Login({ auth: { isAuthenticated }, login }) {
                 </div>
               </div>
 
+              {error && error.message && (
+                <div className="text-red-800 text-base">{error.message}</div>
+              )}
+
               <div>
                 <button
                   type="submit"
@@ -97,4 +104,4 @@ const mapStateToProps = (state) => ({
   auth: state.auth,
 })
 
-export default connect(mapStateToProps, { login })(Login)
+export default connect(mapStateToProps, { login, clearAuthError })(Login)
