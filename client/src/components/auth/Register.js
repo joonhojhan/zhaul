@@ -1,11 +1,15 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { connect } from 'react-redux'
 import { Link, Navigate } from 'react-router-dom'
 
-import { signup } from '../../actions/auth'
+import { signup, clearAuthError } from '../../actions/auth'
 import logo from '../../resources/ZHAUL_logo_final.png'
 
-function Register({ auth: { isAuthenticated }, signup }) {
+function Register({ auth: { isAuthenticated, error }, signup, clearAuthError }) {
+  useEffect(() => {
+    clearAuthError()
+  }, [])
+
   const [firstName, setFirstName] = useState('')
   const [lastName, setLastName] = useState('')
   const [email, setEmail] = useState('')
@@ -137,6 +141,10 @@ function Register({ auth: { isAuthenticated }, signup }) {
                 </div>
               </div>
 
+              {error && error.message && (
+                <div className="text-red-800 text-base">{error.message}</div>
+              )}
+
               <div>
                 <button
                   type="submit"
@@ -156,4 +164,4 @@ function Register({ auth: { isAuthenticated }, signup }) {
 const mapStateToProps = (state) => ({
   auth: state.auth,
 })
-export default connect(mapStateToProps, { signup })(Register)
+export default connect(mapStateToProps, { signup, clearAuthError })(Register)
