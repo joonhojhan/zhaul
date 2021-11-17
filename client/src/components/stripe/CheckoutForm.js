@@ -51,8 +51,6 @@ export default function CheckoutForm({ setShowStripe, toggle, handleCheckout }) 
 
     setIsLoading(true)
 
-    handleCheckout()
-
     const { error } = await stripe.confirmPayment({
       elements,
       confirmParams: {
@@ -60,6 +58,10 @@ export default function CheckoutForm({ setShowStripe, toggle, handleCheckout }) 
         return_url: 'https://zhaul.herokuapp.com/',
       },
     })
+
+    if (!error) {
+      handleCheckout()
+    }
 
     // This point will only be reached if there is an immediate error when
     // confirming the payment. Otherwise, your customer will be redirected to
