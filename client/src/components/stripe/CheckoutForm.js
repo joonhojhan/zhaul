@@ -57,7 +57,7 @@ export default function CheckoutForm({ setShowStripe, toggle, handleCheckout }) 
       elements,
       confirmParams: {
         // Make sure to change this to your payment completion page
-        return_url: 'http://localhost:3000',
+        return_url: 'http://localhost:8080',
       },
     })
 
@@ -90,7 +90,7 @@ export default function CheckoutForm({ setShowStripe, toggle, handleCheckout }) 
         style={{
           height: '100%',
           minHeight: '350px',
-          maxheight: '500px',
+          maxheight: '600px',
           width: '30vw',
           minWidth: '500px',
           alignSelf: 'center',
