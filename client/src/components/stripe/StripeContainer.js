@@ -24,7 +24,7 @@ function StripeContainer({
 
   useEffect(() => {
     // Create PaymentIntent as soon as the page loads
-    fetch('http://localhost:8080/api/stripe/create-payment-intent', {
+    fetch('https://zhaul.herokuapp.com/api/stripe/create-payment-intent', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ items: truck, start, end }),
